@@ -35,3 +35,4 @@ Please ensure your work checks all the points below – it’s what we will be l
 - Unit tests: We have somewhat setup vitest + react-testing-library - however it's broken at the moment (on purpose), so you will need to fix it and add a test.
 - Accessibility improvements
 - Pagination if required?
+# NextjsGraphqlrickandmorty
