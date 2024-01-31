@@ -4,8 +4,13 @@ import Link from "next/link";
 import styles from './page.module.scss'
 import { fetchCharacters } from '@/utils/fetchCharacters';
 
+interface FetchCharactersResponse {
+    characters?: ICharacters[];
+    error?: Error;
+}
+
 export default async function Home() {
-    const data = await fetchCharacters();
+    const data = await fetchCharacters() as FetchCharactersResponse;
     const { error, characters } = data;
     if (error) {
         return (
@@ -19,7 +24,6 @@ export default async function Home() {
             <h2 className="text-4xl">Characters not found</h2>
         </div>
     );
-    console.log('frontend',characters)
     return (
         <>
             <div className="md:relative">
