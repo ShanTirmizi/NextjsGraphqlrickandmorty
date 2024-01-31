@@ -9,7 +9,8 @@ import Image from "next/image";
 
 async function getCharacter(id: string) {
   try {
-    const response = await fetch(`http://localhost:3000/api/character/${id}`);
+    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/character/${id}`);
     const data = await response.json();
     if (data.error) {
       return { error: data.error.message };
