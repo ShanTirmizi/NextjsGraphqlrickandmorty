@@ -2,26 +2,44 @@ interface IParams {
   params: {
     id: string
   }
-
 }
 import { ICharacterImageAndLocation } from "@/types/types";
 import Link from "next/link";
 import Image from "next/image";
 
-export default async function Morty({params}: IParams) {
-  const { id } = params;
-  const response =  await fetch(`http://localhost:3000/api/character/${id}`)
-  const data = await response.json();
+async function getCharacter(id: string) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/character/${id}`);
+    const data = await response.json();
+    if (data.error) {
+      return { error: data.error.message };
+    }
+    return { character: data.character as ICharacterImageAndLocation };
+  } catch (error) {
+    console.error("Fetching error:", error);
+    return { error: 'An error occurred while fetching the character data.' };
+  }
+}
+
+export default async function Page({params}: IParams) {
+  const data = await getCharacter(params.id);
   const { error } = data;
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <h2 className="text-4xl">{error.message}</h2>
+        <h2 className="text-4xl">{error}</h2>
       </div>
-    )
+    );
+  }
+  if (!data.character) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h2 className="text-4xl">Character not found</h2>
+      </div>
+    );
   }
   const character: ICharacterImageAndLocation = data.character;
-  const {episode} = character
+  const { episode } = character;
   return (
     <>
       <div className="row w-full bg-slate-100 p-5 flex flex-col h-600 md:relative h-full md:h-80">
@@ -63,6 +81,5 @@ export default async function Morty({params}: IParams) {
         </div>
       </div>
     </>
-  )
-
+  );
 }

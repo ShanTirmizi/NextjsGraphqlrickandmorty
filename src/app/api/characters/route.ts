@@ -29,10 +29,10 @@ query {
 export async function GET() {
   try {
     const { data } = await getClient().query({ query });
-    return new NextResponse(JSON.stringify(data));
+    return new NextResponse(JSON.stringify({characters: data.characters.results}));
   } catch (error) {
     console.error(error);
-    return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
+    return new NextResponse(JSON.stringify({ error }), {
         status: 500,
     });
   }
