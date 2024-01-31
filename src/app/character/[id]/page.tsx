@@ -6,29 +6,15 @@ interface IParams {
 import { ICharacterImageAndLocation } from "@/types/types";
 import Link from "next/link";
 import Image from "next/image";
-
-async function getCharacter(id: string) {
-  try {
-    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/character/${id}`);
-    const data = await response.json();
-    if (data.error) {
-      return { error: data.error.message };
-    }
-    return { character: data.character as ICharacterImageAndLocation };
-  } catch (error) {
-    console.error("Fetching error:", error);
-    return { error: 'An error occurred while fetching the character data.' };
-  }
-}
+import { fetchCharacter } from "@/utils/fetchCharacter";
 
 export default async function Page({params}: IParams) {
-  const data = await getCharacter(params.id);
+  const data = await fetchCharacter(params.id);
   const { error } = data;
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <h2 className="text-4xl">{error}</h2>
+        <h2 className="text-4xl">{(error as Error).message}</h2>
       </div>
     );
   }
