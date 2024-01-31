@@ -1,20 +1,22 @@
+interface IParams {
+  params: {
+    id: string
+  }
+
+}
 import { ICharacterImageAndLocation } from "@/types/types";
-import { headers } from 'next/headers';
 import Link from "next/link";
 import Image from "next/image";
 
-export default async function Morty() {
-  const headersList = headers()
-  const fullUrl = headersList.get('referer') || "";
-  const id = fullUrl.split("/").pop();
-
+export default async function Morty({params}: IParams) {
+  const { id } = params;
   const response =  await fetch(`http://localhost:3000/api/character/${id}`)
   const data = await response.json();
-  const { loading } = data;
-  if (loading) {
+  const { error } = data;
+  if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <h2 className="text-4xl">Loading...</h2>
+        <h2 className="text-4xl">{error.message}</h2>
       </div>
     )
   }
@@ -22,22 +24,23 @@ export default async function Morty() {
   const {episode} = character
   return (
     <>
-      <div className="row w-full h-full bg-slate-100 p-5 flex flex-col h-600">
-        <div className="mb-10">
+      <div className="row w-full bg-slate-100 p-5 flex flex-col h-600 md:relative h-full md:h-80">
+        <div className="mb-10 text-center md:text-left">
           <h2 className="mb-2 text-4xl">Rick and Morty</h2>
           <Link href="/">
             &#8592; Back to character listing
           </Link>
         </div>
-        <div className="md:flex">
+        <div className="flex flex-col items-center md:flex-row md:items-start md:absolute md:top-40">
           <Image src={character.image} alt={character.name} width={200} height={200} className="rounded-full" />
           <div className="ms-5 mt-5">
             <h2 className="mb-2 text-4xl">{character.name}</h2>
-            <p>Status: {character?.status}</p>
+            <p>Status: {character.status}</p>
+            <p>Origin: {character.origin.name}</p>
           </div>
         </div>
       </div>
-      <div className="p-5">
+      <div className="p-5 mt-10">
         <div className="mb-10">
           <h3 className="text-3xl bold">
             Location Details:

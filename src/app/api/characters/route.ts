@@ -28,10 +28,7 @@ query {
 
 export async function GET() {
   try {
-    const { data, loading } = await getClient().query({ query });
-    if (loading) {
-      return new NextResponse(JSON.stringify({ loading: true }));
-    }
+    const { data } = await getClient().query({ query });
     return new NextResponse(JSON.stringify(data));
   } catch (error) {
     console.error(error);

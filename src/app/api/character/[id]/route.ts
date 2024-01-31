@@ -40,15 +40,12 @@ export async function GET(request: Request) {
   const id = url.pathname.split('/').pop();
 
   try {
-    const { data, loading } = await getClient().query({ query, variables: { id } });
-    // if (loading) {
-    //   return new NextResponse(JSON.stringify({ loading: true }));
-    // }
-    return new NextResponse(JSON.stringify({character: data.character, loading}));
+    const { data } = await getClient().query({ query, variables: { id } });
+    return new NextResponse(JSON.stringify({character: data.character}));
   } catch (error) {
     console.error(error);
     return new NextResponse(
-      JSON.stringify({ error: 'Internal Server Error' }),
+      JSON.stringify({ error }),
       {
         status: 500,
       }
