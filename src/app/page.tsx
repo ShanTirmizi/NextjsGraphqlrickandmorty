@@ -4,20 +4,6 @@ import Link from "next/link";
 import styles from './page.module.scss'
 import { fetchCharacters } from '@/utils/fetchCharacters';
 
-// async function getCharacters() {
-//     try {
-//       const response = await fetchCharacters();
-//       const data = await response.json();
-//       if (data.error) {
-//         return { error: data.error.message };
-//       }
-//       return { characters: data.characters as ICharacters[] };
-//     } catch (error) {
-//       console.error("Fetching error:", error);
-//       return { error: 'An error occurred while fetching characters.' };
-//     }
-//   }
-
 export default async function Home() {
     const data = await fetchCharacters();
     const { error, characters } = data;
