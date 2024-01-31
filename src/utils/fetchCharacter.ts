@@ -1,6 +1,5 @@
 import { gql }  from '@apollo/client';
 import { getClient } from '@/lib/client'
-import { NextResponse } from 'next/server';
 
 const query = gql`
   query GetCharacter($id: ID!) {
@@ -35,21 +34,13 @@ const query = gql`
   }
 `;
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const id = url.pathname.split('/').pop();
-
+export async function fetchCharacter(id: string) {
   try {
     const { data } = await getClient().query({ query, variables: { id } });
-    return new NextResponse(JSON.stringify({character: data.character}));
+    return { character: data.character };
   } catch (error) {
     console.error(error);
-    return new NextResponse(
-      JSON.stringify({ error }),
-      {
-        status: 500,
-      }
-    );
+    return { error }
   }
 
 }

@@ -1,6 +1,5 @@
 import { gql }  from '@apollo/client';
 import { getClient } from '@/lib/client'
-import { NextResponse } from 'next/server';
 
 const query = gql`
 query {
@@ -26,14 +25,12 @@ query {
 }
 `;
 
-export async function GET() {
+export async function fetchCharacters() {
   try {
     const { data } = await getClient().query({ query });
-    return new NextResponse(JSON.stringify({characters: data.characters.results}));
+    return { characters: data.characters.results };
   } catch (error) {
     console.error(error);
-    return new NextResponse(JSON.stringify({ error }), {
-        status: 500,
-    });
+    return { error}
   }
 }

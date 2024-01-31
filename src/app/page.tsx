@@ -2,28 +2,29 @@ import Image from "next/image";
 import {ICharacters} from '@/types/types'
 import Link from "next/link";
 import styles from './page.module.scss'
+import { fetchCharacters } from '@/utils/fetchCharacters';
 
-async function getCharacters() {
-    try {
-        const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
-        const response = await fetch(`${baseUrl}/api/characters`);
-      const data = await response.json();
-      if (data.error) {
-        return { error: data.error.message };
-      }
-      return { characters: data.characters as ICharacters[] };
-    } catch (error) {
-      console.error("Fetching error:", error);
-      return { error: 'An error occurred while fetching characters.' };
-    }
-  }
+// async function getCharacters() {
+//     try {
+//       const response = await fetchCharacters();
+//       const data = await response.json();
+//       if (data.error) {
+//         return { error: data.error.message };
+//       }
+//       return { characters: data.characters as ICharacters[] };
+//     } catch (error) {
+//       console.error("Fetching error:", error);
+//       return { error: 'An error occurred while fetching characters.' };
+//     }
+//   }
 
 export default async function Home() {
-    const { characters, error } = await getCharacters();
+    const data = await fetchCharacters();
+    const { error, characters } = data;
     if (error) {
         return (
           <div className="flex justify-center items-center h-screen">
-            <h2 className="text-4xl">{error}</h2>
+            <h2 className="text-4xl">{(error as Error).message}</h2>
           </div>
         );
     }
@@ -32,6 +33,7 @@ export default async function Home() {
             <h2 className="text-4xl">Characters not found</h2>
         </div>
     );
+    console.log('frontend',characters)
     return (
         <>
             <div className="md:relative">
