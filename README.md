@@ -30,3 +30,5 @@ yarn run dev
 ```
 
 After starting the server, you can access the application at [http://localhost:3000](http://localhost:3000)
+
+Or to view the live url just visit [Rick and Morty](https://nextjs-graphqlrickandmorty.vercel.app/)
